@@ -12,7 +12,9 @@ CustomerId – cliente associado ao pedido.
 
 Money – representa valores monetários.
 
-Repositório: OrderRepository – repositorio de pedidos.
+Repositório:
+
+OrderRepository – repositorio de pedidos.
 
 Serviços:
 
