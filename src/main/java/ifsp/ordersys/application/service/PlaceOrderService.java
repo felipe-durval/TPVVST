@@ -1,8 +1,6 @@
 package ifsp.ordersys.application.service;
 
+public class PlaceOrderService {
 
-public class CalculateTotalService {
 
-
-    }
-
+}
