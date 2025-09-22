@@ -22,7 +22,7 @@ PlaceOrderService – registrar um novo pedido.
 
 AddItemToOrderService – adicionar itens em pedidos.
 
-UpdateOrderStatusService – alterar status do pedido.
+ChangeOrderStatus – alterar status do pedido.
 
 CalculateTotalService – calcular o valor total.
 
