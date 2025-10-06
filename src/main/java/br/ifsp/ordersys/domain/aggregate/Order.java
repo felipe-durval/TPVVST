@@ -27,7 +27,7 @@ public class Order {
         this.customerId = customerId;
         this.table = table;
 
-        // ✅ cria uma cópia mutável
+
         this.items = new ArrayList<>(items);
 
         this.status = "RECEBIDO";
@@ -37,6 +37,10 @@ public class Order {
     }
 
     public void addItem(OrderItem item) {
+        if (item.getQuantity() <= 0 || item.getUnitPrice() <= 0) {
+            throw new IllegalArgumentException("INVALID_ITEM");
+        }
+
         this.items.add(item);
         this.total = this.total.add(item.total());
     }
