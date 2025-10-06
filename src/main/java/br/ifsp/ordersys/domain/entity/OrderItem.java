@@ -8,7 +8,7 @@ public class OrderItem {
     private final int quantity;
     private boolean available = false;
 
-    public OrderItem(String name, int unitPrice, int quantity) {
+    public OrderItem(String name, int unitPrice, int quantity, boolean available) {
         this.name = name;
         this.unitPrice = unitPrice;
         this.quantity = quantity;

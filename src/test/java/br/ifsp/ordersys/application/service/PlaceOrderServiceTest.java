@@ -26,8 +26,8 @@ public class PlaceOrderServiceTest {
 
 
         List<OrderItem> items = List.of(
-                new OrderItem("Pizza", 30, 1),
-                new OrderItem("Suco", 10, 1)
+                new OrderItem("Pizza", 30, 1, true),
+                new OrderItem("Suco", 10, 1, true)
         );
 
         PlaceOrderService service = new PlaceOrderService();
@@ -63,7 +63,7 @@ public class PlaceOrderServiceTest {
         Table table = new Table("mesa-02");
         CustomerId customerId = new CustomerId(table.getId());
 
-        OrderItem unavailableItem = new OrderItem("Lasanha", 25, 1);
+        OrderItem unavailableItem = new OrderItem("Lasanha", 25, 1, false);
         List<OrderItem> items = List.of(unavailableItem);
 
         PlaceOrderService service = new PlaceOrderService();
@@ -74,5 +74,29 @@ public class PlaceOrderServiceTest {
 
         assertEquals("ITEM_UNAVAILABLE", exception.getMessage());
     }
+
+    //US-01 - SCENARIO 4
+    @Test
+    void shouldAllowMultipleOrdersForSameTable() {
+        Table table = new Table("mesa-03");
+        CustomerId customerId = new CustomerId(table.getId());
+
+        List<OrderItem> firstItems = List.of(
+                new OrderItem("Pizza", 30, 1, true)
+        );
+        List<OrderItem> secondItems = List.of(
+                new OrderItem("Suco", 10, 2, true)
+        );
+
+        PlaceOrderService service = new PlaceOrderService();
+
+        Order firstOrder = service.createOrder(customerId, table, firstItems);
+        Order secondOrder = service.createOrder(customerId, table, secondItems);
+
+        List<Order> history = service.getOrdersForTable("mesa-03");
+
+        assertEquals(2, history.size());
+    }
+
 
 }
