@@ -39,4 +39,19 @@ public class PlaceOrderServiceTest {
 
         assertEquals(0, order.getTotal().getValue().compareTo(BigDecimal.valueOf(40)));
     }
+
+    @Test
+    void shouldRejectEmptyOrder() {
+        Table table = new Table("mesa-08");
+        CustomerId customerId = new CustomerId(table.getId());
+        List<OrderItem> items = List.of();
+
+        PlaceOrderService service = new PlaceOrderService();
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+                service.createOrder(customerId, table, items)
+        );
+
+        assertEquals("EMPTY_ORDER", exception.getMessage());
+    }
 }
