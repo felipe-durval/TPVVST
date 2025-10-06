@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Tag("UnitTest")
 @Tag("TDD")
 public class PlaceOrderServiceTest {
+    //US-01 - SCENARIO 1
     @Test
     public void shouldCreateOrderWithValidItems() {
 
@@ -40,6 +41,7 @@ public class PlaceOrderServiceTest {
         assertEquals(0, order.getTotal().getValue().compareTo(BigDecimal.valueOf(40)));
     }
 
+    //US-01 - SCENARIO 2
     @Test
     void shouldRejectEmptyOrder() {
         Table table = new Table("mesa-08");
@@ -54,4 +56,23 @@ public class PlaceOrderServiceTest {
 
         assertEquals("EMPTY_ORDER", exception.getMessage());
     }
+
+    //US-01 - SCENARIO 3
+    @Test
+    void shouldRejectOrderWithUnavailableItem() {
+        Table table = new Table("mesa-02");
+        CustomerId customerId = new CustomerId(table.getId());
+        
+        OrderItem unavailableItem = new OrderItem("Lasanha", 25, 1, false);
+        List<OrderItem> items = List.of(unavailableItem);
+
+        PlaceOrderService service = new PlaceOrderService();
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+                service.createOrder(customerId, table, items)
+        );
+
+        assertEquals("ITEM_UNAVAILABLE", exception.getMessage());
+    }
+
 }
