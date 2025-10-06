@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 
-
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,6 +37,6 @@ public class PlaceOrderServiceTest {
         assertEquals("RECEBIDO", order.getStatus());
 
 
-        assertEquals(40, order.getTotal().getValue());
+        assertEquals(0, order.getTotal().getValue().compareTo(BigDecimal.valueOf(40)));
     }
 }

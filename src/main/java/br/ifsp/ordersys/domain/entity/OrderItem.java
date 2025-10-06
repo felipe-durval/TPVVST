@@ -1,23 +1,23 @@
 package br.ifsp.ordersys.domain.entity;
 
-
+import br.ifsp.ordersys.domain.valueobject.Money;
 
 public class OrderItem {
-    private String name;
-    private int price;
-    private int quantity;
+    private final String name;
+    private final int unitPrice;
+    private final int quantity;
 
-    public OrderItem(String name, int price, int quantity) {
+    public OrderItem(String name, int unitPrice, int quantity) {
         this.name = name;
-        this.price = price;
+        this.unitPrice = unitPrice;
         this.quantity = quantity;
     }
 
-    public int getPrice() {
-        return price;
+    public Money total() {
+        return Money.of(unitPrice * quantity);
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
+    public String getName() { return name; }
+    public int getUnitPrice() { return unitPrice; }
+    public int getQuantity() { return quantity; }
 }

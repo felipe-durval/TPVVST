@@ -1,39 +1,35 @@
 package br.ifsp.ordersys.domain.aggregate;
 
+import br.ifsp.ordersys.domain.entity.OrderItem;
 import br.ifsp.ordersys.domain.valueobject.Money;
-import br.ifsp.ordersys.domain.valueobject.CustomerId;
 import br.ifsp.ordersys.domain.valueobject.Table;
 
-public class Order {
-    private String status;
-    private Money total;
-    private CustomerId customerId;
-    private Table table;
+import java.util.List;
+import java.util.UUID;
 
-    public Order(CustomerId customerId, Table table) {
-        this.status = "RECEBIDO";
-        this.total = new Money(40);
+public class Order {
+    private final UUID id;
+    private final String customerId;
+    private final Table table;
+    private final List<OrderItem> items;
+    private final String status;
+    private final Money total;
+
+    public Order(String customerId, Table table, List<OrderItem> items) {
+        this.id = UUID.randomUUID();
         this.customerId = customerId;
         this.table = table;
+        this.items = items;
+        this.status = "RECEBIDO";
+        this.total = items.stream()
+                .map(OrderItem::total)
+                .reduce(Money.zero(), Money::add);
     }
 
-    public Order() {
-
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public Money getTotal() {
-        return total;
-    }
-
-    public CustomerId getCustomerId() {
-        return customerId;
-    }
-
-    public Table getTable() {
-        return table;
-    }
+    public UUID getId() { return id; }
+    public String getCustomerId() { return customerId; }
+    public Table getTable() { return table; }
+    public List<OrderItem> getItems() { return items; }
+    public String getStatus() { return status; }
+    public Money getTotal() { return total; }
 }

@@ -1,15 +1,17 @@
 package br.ifsp.ordersys.domain.valueobject;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
-public class Money {
-    private int value;
+public final class Money {
+    private final BigDecimal value;
 
-    public Money(int value) {
-        this.value = value;
+    private Money(BigDecimal value) {
+        this.value = value.setScale(2, RoundingMode.HALF_UP);
     }
 
-    public int getValue() {
-        return value;
-    }
+    public static Money of(double v) { return new Money(BigDecimal.valueOf(v)); }
+    public static Money zero() { return new Money(BigDecimal.ZERO); }
+    public Money add(Money other) { return new Money(this.value.add(other.value)); }
+    public BigDecimal getValue() { return value; }
 }
-
