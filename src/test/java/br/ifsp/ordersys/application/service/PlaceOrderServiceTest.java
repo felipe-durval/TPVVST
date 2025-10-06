@@ -1,21 +1,27 @@
 package br.ifsp.ordersys.application.service;
 
+
+import br.ifsp.ordersys.domain.aggregate.Order;
+import br.ifsp.ordersys.domain.entity.OrderItem;
+import br.ifsp.ordersys.domain.valueobject.CustomerId;
+import br.ifsp.ordersys.domain.valueobject.Table;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import ordersys.domain.model.Order;
-import ordersys.domain.model.OrderItem;
-import ordersys.domain.model.CustomerId;
+
+
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@UnitTest
-@TDD
+@Tag("UnitTest")
+@Tag("TDD")
 public class PlaceOrderServiceTest {
-
     @Test
     public void shouldCreateOrderWithValidItems() {
-        CustomerId customerId = new CustomerId("mesa-12");
+
+        Table table = new Table("mesa-12");
+        CustomerId customerId = new CustomerId(table.getId());
 
 
         List<OrderItem> items = List.of(
@@ -25,12 +31,12 @@ public class PlaceOrderServiceTest {
 
         PlaceOrderService service = new PlaceOrderService();
 
-        Order order = service.createOrder(customerId, items);
+        Order order = service.createOrder(customerId, table, items);
 
         assertNotNull(order);
         assertEquals("RECEBIDO", order.getStatus());
 
-        // E o valor total exibido é R$40
+
         assertEquals(40, order.getTotal().getValue());
     }
 }

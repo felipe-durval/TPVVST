@@ -1,5 +1,15 @@
 package br.ifsp.ordersys.domain.valueobject;
 
-public final class Money {
 
+public class Money {
+    private int value;
+
+    public Money(int value) {
+        this.value = value;
+    }
+
+    public int getValue() {
+        return value;
+    }
 }
+
