@@ -45,6 +45,10 @@ public class Order {
         this.total = this.total.add(item.total());
     }
 
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public UUID getId() { return id; }
     public String getCustomerId() { return customerId; }
     public Table getTable() { return table; }

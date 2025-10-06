@@ -19,6 +19,10 @@ public class AddItemToOrderService {
             throw new IllegalArgumentException("ORDER_NOT_FOUND");
         }
 
+        if ("ENTREGUE".equalsIgnoreCase(order.getStatus())) {
+            throw new IllegalArgumentException("ORDER_ALREADY_CLOSED");
+        }
+
         if (item.getQuantity() <= 0 || item.getUnitPrice() <= 0) {
             throw new IllegalArgumentException("INVALID_ITEM");
         }
