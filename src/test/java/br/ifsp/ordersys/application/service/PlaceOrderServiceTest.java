@@ -62,8 +62,8 @@ public class PlaceOrderServiceTest {
     void shouldRejectOrderWithUnavailableItem() {
         Table table = new Table("mesa-02");
         CustomerId customerId = new CustomerId(table.getId());
-        
-        OrderItem unavailableItem = new OrderItem("Lasanha", 25, 1, false);
+
+        OrderItem unavailableItem = new OrderItem("Lasanha", 25, 1);
         List<OrderItem> items = List.of(unavailableItem);
 
         PlaceOrderService service = new PlaceOrderService();

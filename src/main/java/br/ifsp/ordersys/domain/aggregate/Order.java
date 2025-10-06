@@ -20,6 +20,10 @@ public class Order {
         if (items == null || items.isEmpty()) {
             throw new IllegalArgumentException("EMPTY_ORDER");
         }
+        boolean hasUnavailable = items.stream().anyMatch(i -> !i.isAvailable());
+        if (hasUnavailable) {
+            throw new IllegalArgumentException("ITEM_UNAVAILABLE");
+        }
         this.id = UUID.randomUUID();
         this.customerId = customerId;
         this.table = table;
