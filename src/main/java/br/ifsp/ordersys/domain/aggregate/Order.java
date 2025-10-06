@@ -4,6 +4,8 @@ import br.ifsp.ordersys.domain.entity.OrderItem;
 import br.ifsp.ordersys.domain.valueobject.Money;
 import br.ifsp.ordersys.domain.valueobject.Table;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,35 +15,39 @@ public class Order {
     private final String customerId;
     private final Table table;
     private final List<OrderItem> items;
-    private final String status;
-    private final Money total;
+    private String status;
+    private Money total;
 
     public Order(String customerId, Table table, List<OrderItem> items) {
         if (items == null || items.isEmpty()) {
             throw new IllegalArgumentException("EMPTY_ORDER");
         }
-        boolean hasUnavailable = items.stream().anyMatch(i -> !i.isAvailable());
-        if (hasUnavailable) {
-            throw new IllegalArgumentException("ITEM_UNAVAILABLE");
-        }
-        boolean hasInvalidQuantity = items.stream().anyMatch(i -> i.getQuantity() <= 0);
-        if (hasInvalidQuantity) {
-            throw new IllegalArgumentException("INVALID_QUANTITY");
-        }
+
         this.id = UUID.randomUUID();
         this.customerId = customerId;
         this.table = table;
-        this.items = items;
+
+        // ✅ cria uma cópia mutável
+        this.items = new ArrayList<>(items);
+
         this.status = "RECEBIDO";
         this.total = items.stream()
                 .map(OrderItem::total)
                 .reduce(Money.zero(), Money::add);
     }
 
+    public void addItem(OrderItem item) {
+        this.items.add(item);
+        this.total = this.total.add(item.total());
+    }
+
     public UUID getId() { return id; }
     public String getCustomerId() { return customerId; }
     public Table getTable() { return table; }
-    public List<OrderItem> getItems() { return items; }
     public String getStatus() { return status; }
     public Money getTotal() { return total; }
+
+    public List<OrderItem> getItems() {
+        return Collections.unmodifiableList(items);
+    }
 }

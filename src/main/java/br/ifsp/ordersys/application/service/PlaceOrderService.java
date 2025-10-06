@@ -19,8 +19,18 @@ public class PlaceOrderService {
         ordersByTable.computeIfAbsent(table.getId(), k -> new ArrayList<>()).add(order);
         return order;
     }
-
     public List<Order> getOrdersForTable(String tableId) {
         return ordersByTable.getOrDefault(tableId, List.of());
     }
+
+
+    public Order getOrderById(java.util.UUID orderId) {
+        return ordersByTable.values().stream()
+                .flatMap(List::stream)
+                .filter(o -> o.getId().equals(orderId))
+                .findFirst()
+                .orElse(null);
+    }
+
 }
+

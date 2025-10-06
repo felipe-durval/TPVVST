@@ -14,12 +14,14 @@ public class AddItemToOrderService {
     }
 
     public void addItem(UUID orderId, OrderItem item) {
-        // implementação mínima — propositalmente vazia (RED)
-        throw new UnsupportedOperationException("Not implemented yet");
+        Order order = placeOrderService.getOrderById(orderId);
+        if (order == null) {
+            throw new IllegalArgumentException("ORDER_NOT_FOUND");
+        }
+        order.addItem(item);
     }
 
     public Order getOrder(UUID orderId) {
-        // apenas placeholder para o teste compilar
-        return null;
+        return placeOrderService.getOrderById(orderId);
     }
 }
