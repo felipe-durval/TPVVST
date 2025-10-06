@@ -1,4 +1,4 @@
-package br.ifsp.demo.domain.order;
+package br.ifsp.demo.domain.repository;
 
 
 public interface OrderRepository {

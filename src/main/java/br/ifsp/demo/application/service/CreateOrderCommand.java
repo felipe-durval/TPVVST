@@ -1,4 +1,4 @@
-package br.ifsp.demo.application.order;
+package br.ifsp.demo.application.service;
 
 import java.math.BigDecimal;
 import java.util.List;
