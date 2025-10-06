@@ -15,7 +15,7 @@ public class PlaceOrderService {
     private final Map<String, List<Order>> ordersByTable = new HashMap<>();
 
     public Order createOrder(CustomerId customerId, Table table, List<OrderItem> items) {
-        Order order = new Order(customerId.getValue().toString(), table, items);
+        Order order = new Order(customerId.getValue(), table, items);
         ordersByTable.computeIfAbsent(table.getId(), k -> new ArrayList<>()).add(order);
         return order;
     }
