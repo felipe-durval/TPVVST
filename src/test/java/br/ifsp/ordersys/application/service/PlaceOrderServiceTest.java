@@ -105,19 +105,21 @@ public class PlaceOrderServiceTest {
         Table table = new Table("mesa-05");
         CustomerId customerId = new CustomerId(table.getId());
 
-        // item com quantidade inválida (0)
         List<OrderItem> items = List.of(
                 new OrderItem("Coca-Cola", 8, 0, true)
         );
 
         PlaceOrderService service = new PlaceOrderService();
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () ->
-                service.createOrder(customerId, table, items)
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> service.createOrder(customerId, table, items)
         );
 
         assertEquals("INVALID_QUANTITY", exception.getMessage());
     }
+
+
 
 
 

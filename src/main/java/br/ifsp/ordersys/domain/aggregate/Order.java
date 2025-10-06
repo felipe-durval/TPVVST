@@ -24,6 +24,10 @@ public class Order {
         if (hasUnavailable) {
             throw new IllegalArgumentException("ITEM_UNAVAILABLE");
         }
+        boolean hasInvalidQuantity = items.stream().anyMatch(i -> i.getQuantity() <= 0);
+        if (hasInvalidQuantity) {
+            throw new IllegalArgumentException("INVALID_QUANTITY");
+        }
         this.id = UUID.randomUUID();
         this.customerId = customerId;
         this.table = table;

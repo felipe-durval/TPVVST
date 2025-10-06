@@ -15,6 +15,7 @@ public class OrderItem {
         this.available = available;
     }
 
+
     public Money total() {
         return Money.of(unitPrice * quantity);
     }
