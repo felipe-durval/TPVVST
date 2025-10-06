@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
-
+import java.util.UUID;
 
 
 public class AddItemToOrderServiceTest {
@@ -70,5 +70,28 @@ public class AddItemToOrderServiceTest {
                 () -> addService.addItem(existingOrder.getId(), invalidItem2)
         );
         assertEquals("INVALID_ITEM", exception2.getMessage());
+
+
+    }
+    @Test
+    void shouldRejectAddingItemToNonexistentOrder() {
+        // Dado que o garçom informa um número de pedido inexistente
+        Table table = new Table("mesa-20");
+        CustomerId customerId = new CustomerId(table.getId());
+
+        PlaceOrderService placeService = new PlaceOrderService();
+        AddItemToOrderService addService = new AddItemToOrderService(placeService);
+
+        UUID nonexistentOrderId = UUID.randomUUID();
+
+        OrderItem lasanha = new OrderItem("Lasanha", 35, 1, true);
+
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> addService.addItem(nonexistentOrderId, lasanha)
+        );
+
+        assertEquals("ORDER_NOT_FOUND", exception.getMessage());
     }
 }

@@ -18,6 +18,11 @@ public class AddItemToOrderService {
         if (order == null) {
             throw new IllegalArgumentException("ORDER_NOT_FOUND");
         }
+
+        if (item.getQuantity() <= 0 || item.getUnitPrice() <= 0) {
+            throw new IllegalArgumentException("INVALID_ITEM");
+        }
+
         order.addItem(item);
     }
 
