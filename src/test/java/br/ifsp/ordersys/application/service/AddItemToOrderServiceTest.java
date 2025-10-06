@@ -94,4 +94,35 @@ public class AddItemToOrderServiceTest {
 
         assertEquals("ORDER_NOT_FOUND", exception.getMessage());
     }
+
+    @Test
+    void shouldRejectAddingItemToDeliveredOrder() {
+        // Dado que existe um pedido no status ENTREGUE
+        Table table = new Table("mesa-25");
+        CustomerId customerId = new CustomerId(table.getId());
+
+        List<OrderItem> initialItems = List.of(
+                new OrderItem("Pizza", 30, 1, true)
+        );
+
+        PlaceOrderService placeService = new PlaceOrderService();
+        Order existingOrder = placeService.createOrder(customerId, table, initialItems);
+
+        // Simula mudança de status do pedido para ENTREGUE
+        existingOrder.setStatus("ENTREGUE");
+
+        AddItemToOrderService addService = new AddItemToOrderService(placeService);
+
+        OrderItem lasanha = new OrderItem("Lasanha", 35, 1, true);
+
+        // Quando tenta adicionar novo item
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> addService.addItem(existingOrder.getId(), lasanha)
+        );
+
+        // Então o sistema rejeita com ORDER_ALREADY_CLOSED
+        assertEquals("ORDER_ALREADY_CLOSED", exception.getMessage());
+    }
+
 }
