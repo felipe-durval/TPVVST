@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Order {
+
     private final UUID id;
     private final String customerId;
     private final Table table;
@@ -16,6 +17,9 @@ public class Order {
     private final Money total;
 
     public Order(String customerId, Table table, List<OrderItem> items) {
+        if (items == null || items.isEmpty()) {
+            throw new IllegalArgumentException("EMPTY_ORDER");
+        }
         this.id = UUID.randomUUID();
         this.customerId = customerId;
         this.table = table;
