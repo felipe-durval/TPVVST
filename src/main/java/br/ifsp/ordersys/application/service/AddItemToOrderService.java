@@ -23,7 +23,7 @@ public class AddItemToOrderService {
             throw new IllegalArgumentException("ORDER_ALREADY_CLOSED");
         }
 
-        if (item.getQuantity() <= 0 || item.getUnitPrice() <= 0) {
+        if (item.getQuantity() <= 0 || item.getUnitPrice() <= 0 || item.getName().isEmpty()) {
             throw new IllegalArgumentException("INVALID_ITEM");
         }
 

@@ -26,10 +26,7 @@ public class Order {
         this.id = UUID.randomUUID();
         this.customerId = customerId;
         this.table = table;
-
-
         this.items = new ArrayList<>(items);
-
         this.status = "RECEBIDO";
         this.total = items.stream()
                 .map(OrderItem::total)
