@@ -5,10 +5,11 @@ import br.ifsp.ordersys.domain.entity.OrderItem;
 import br.ifsp.ordersys.domain.valueobject.CustomerId;
 import br.ifsp.ordersys.domain.valueobject.Table;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 public class AddItemToOrderServiceTest {
     @Test
@@ -37,5 +38,37 @@ public class AddItemToOrderServiceTest {
                 updatedOrder.getItems().stream()
                         .anyMatch(i -> i.getName().equals("Lasanha"))
         );
+    }
+
+    @Test
+    void shouldRejectInvalidItemWhenAddingToOrder() {
+
+        Table table = new Table("mesa-15");
+        CustomerId customerId = new CustomerId(table.getId());
+
+        List<OrderItem> initialItems = List.of(
+                new OrderItem("Suco", 10, 1, true)
+        );
+
+        PlaceOrderService placeService = new PlaceOrderService();
+        Order existingOrder = placeService.createOrder(customerId, table, initialItems);
+
+        AddItemToOrderService addService = new AddItemToOrderService(placeService);
+
+
+        OrderItem invalidItem1 = new OrderItem("Água", 5, 0, true);
+        OrderItem invalidItem2 = new OrderItem("Refri", -10, 1, true);
+
+        IllegalArgumentException exception1 = assertThrows(
+                IllegalArgumentException.class,
+                () -> addService.addItem(existingOrder.getId(), invalidItem1)
+        );
+        assertEquals("INVALID_ITEM", exception1.getMessage());
+
+        IllegalArgumentException exception2 = assertThrows(
+                IllegalArgumentException.class,
+                () -> addService.addItem(existingOrder.getId(), invalidItem2)
+        );
+        assertEquals("INVALID_ITEM", exception2.getMessage());
     }
 }
