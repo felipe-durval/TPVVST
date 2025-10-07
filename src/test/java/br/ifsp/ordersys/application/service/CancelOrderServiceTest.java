@@ -62,4 +62,31 @@ class CancelOrderServiceTest {
         assertEquals("CANNOT_CANCEL_DELIVERED_ORDER", exception.getMessage());
     }
 
+    //US05 - SCENARIO 3
+    @Test
+    void shouldRejectCancelWhenOrderAlreadyCanceled() {
+        Table table = new Table("mesa-13");
+        CustomerId customerId = new CustomerId(table.getId());
+
+        List<OrderItem> items = List.of(
+                new OrderItem("Lasanha", 35, 1, true)
+        );
+
+        PlaceOrderService placeService = new PlaceOrderService();
+        Order order = placeService.createOrder(customerId, table, items);
+
+        // simula pedido cancelado anteriormente
+        order.setStatus("CANCELED");
+
+        CancelOrderService cancelService = new CancelOrderService(placeService);
+
+        IllegalStateException exception = assertThrows(
+                IllegalStateException.class,
+                () -> cancelService.cancelOrder(order.getId())
+        );
+
+        assertEquals("ORDER_ALREADY_CANCELLED", exception.getMessage());
+    }
+
+
 }
