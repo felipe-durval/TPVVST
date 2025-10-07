@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Tag("TDD")
 class CancelOrderServiceTest {
 
+    //US 05 - SCENARIO 1
     @Test
     void shouldCancelOrderWhenNotDelivered() {
         Table table = new Table("mesa-11");
@@ -34,4 +35,31 @@ class CancelOrderServiceTest {
         Order canceled = cancelService.getOrder(order.getId());
         assertEquals("CANCELED", canceled.getStatus());
     }
+
+    //US 05 - SCENARIO 2
+    @Test
+    void shouldRejectCancelWhenOrderAlreadyDelivered() {
+        Table table = new Table("mesa-12");
+        CustomerId customerId = new CustomerId(table.getId());
+
+        List<OrderItem> items = List.of(
+                new OrderItem("Pizza", 30, 1, true)
+        );
+
+        PlaceOrderService placeService = new PlaceOrderService();
+        Order order = placeService.createOrder(customerId, table, items);
+
+        // simula entrega do pedido
+        order.setStatus("ENTREGUE");
+
+        CancelOrderService cancelService = new CancelOrderService(placeService);
+
+        IllegalStateException exception = assertThrows(
+                IllegalStateException.class,
+                () -> cancelService.cancelOrder(order.getId())
+        );
+
+        assertEquals("CANNOT_CANCEL_DELIVERED_ORDER", exception.getMessage());
+    }
+
 }

@@ -45,6 +45,7 @@ public class Order {
         this.total = this.total.add(item.total());
     }
 
+
     public void setStatus(String status) {
         this.status = status;
     }
