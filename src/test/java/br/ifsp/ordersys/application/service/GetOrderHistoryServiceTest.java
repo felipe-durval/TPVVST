@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Tag("TDD")
 class GetOrderHistoryServiceTest {
 
+    //US -04 - CENARIO 1
     @Test
     void shouldReturnSpecificOrderData() {
         Table table = new Table("mesa-07");
@@ -38,4 +39,37 @@ class GetOrderHistoryServiceTest {
         assertEquals("Lasanha", order.getItems().get(0).getName());
         assertEquals(35, order.getItems().get(0).getUnitPrice());
     }
+
+    //US-04 - CENARIO 2
+
+    @Test
+    void shouldReturnAllOrders() {
+        Table table1 = new Table("mesa-01");
+        CustomerId customer1 = new CustomerId(table1.getId());
+
+        Table table2 = new Table("mesa-02");
+        CustomerId customer2 = new CustomerId(table2.getId());
+
+        PlaceOrderService placeService = new PlaceOrderService();
+
+        List<OrderItem> pedido1 = List.of(new OrderItem("Pizza", 30, 1, true));
+        List<OrderItem> pedido2 = List.of(new OrderItem("Suco", 10, 2, true));
+
+        placeService.createOrder(customer1, table1, pedido1);
+        placeService.createOrder(customer2, table2, pedido2);
+
+        GetOrderHistoryService historyService = new GetOrderHistoryService(placeService);
+
+        List<Order> allOrders = historyService.findAllOrders();
+
+        assertEquals(2, allOrders.size());
+        assertTrue(allOrders.stream().anyMatch(o ->
+                o.getItems().stream().anyMatch(i -> i.getProductName().equals("Pizza"))
+        ));
+        assertTrue(allOrders.stream().anyMatch(o ->
+                o.getItems().stream().anyMatch(i -> i.getProductName().equals("Suco"))
+        ));
+    }
+
+
 }
