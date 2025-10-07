@@ -14,6 +14,10 @@ public class ChangeOrderTableService {
     }
 
     public void changeTable(UUID orderId, Table newTable) {
+        if (newTable == null || newTable.getId() == null || newTable.getId().isBlank()) {
+            throw new IllegalArgumentException("INVALID_TABLE");
+        }
+
         Order order = placeOrderService.getAllOrders().stream()
                 .filter(o -> o.getId().equals(orderId))
                 .findFirst()
