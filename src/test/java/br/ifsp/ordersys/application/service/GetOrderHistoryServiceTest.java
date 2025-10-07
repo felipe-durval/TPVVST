@@ -64,10 +64,10 @@ class GetOrderHistoryServiceTest {
 
         assertEquals(2, allOrders.size());
         assertTrue(allOrders.stream().anyMatch(o ->
-                o.getItems().stream().anyMatch(i -> i.getProductName().equals("Pizza"))
+                o.getItems().stream().anyMatch(i -> i.getName().equals("Pizza"))
         ));
         assertTrue(allOrders.stream().anyMatch(o ->
-                o.getItems().stream().anyMatch(i -> i.getProductName().equals("Suco"))
+                o.getItems().stream().anyMatch(i -> i.getName().equals("Suco"))
         ));
     }
 

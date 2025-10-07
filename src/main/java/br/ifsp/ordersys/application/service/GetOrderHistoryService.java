@@ -20,4 +20,9 @@ public class GetOrderHistoryService {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("ORDER_NOT_FOUND"));
     }
+
+    public List<Order> findAllOrders() {
+        return placeOrderService.getAllOrders();
+    }
+
 }
