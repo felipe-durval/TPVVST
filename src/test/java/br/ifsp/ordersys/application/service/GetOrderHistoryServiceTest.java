@@ -35,7 +35,7 @@ class GetOrderHistoryServiceTest {
         assertNotNull(order);
         assertEquals(created.getId(), order.getId());
         assertEquals(2, order.getItems().size());
-        assertEquals("Lasanha", order.getItems().get(0).getProductName());
+        assertEquals("Lasanha", order.getItems().get(0).getName());
         assertEquals(35, order.getItems().get(0).getUnitPrice());
     }
 }
