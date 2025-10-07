@@ -106,7 +106,7 @@ public class PlaceOrderServiceTest {
         CustomerId customerId = new CustomerId(table.getId());
 
         List<OrderItem> items = List.of(
-                new OrderItem("Coca-Cola", 8, 0, true)
+                new OrderItem("Coca-Cola", 8, 0, true) // quantidade inválida
         );
 
         PlaceOrderService service = new PlaceOrderService();
@@ -118,6 +118,7 @@ public class PlaceOrderServiceTest {
 
         assertEquals("INVALID_QUANTITY", exception.getMessage());
     }
+
 
 
 

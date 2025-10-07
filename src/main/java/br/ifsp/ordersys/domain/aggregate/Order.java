@@ -23,13 +23,21 @@ public class Order {
             throw new IllegalArgumentException("EMPTY_ORDER");
         }
 
+        boolean hasUnavailable = items.stream().anyMatch(i -> !i.isAvailable());
+        if (hasUnavailable) {
+            throw new IllegalArgumentException("ITEM_UNAVAILABLE");
+        }
+
+        // ⚠️ ESTA É A VALIDAÇÃO QUE ESTÁ FALTANDO
+        boolean hasInvalidQuantity = items.stream().anyMatch(i -> i.getQuantity() <= 0);
+        if (hasInvalidQuantity) {
+            throw new IllegalArgumentException("INVALID_QUANTITY");
+        }
+
         this.id = UUID.randomUUID();
         this.customerId = customerId;
         this.table = table;
-
-
         this.items = new ArrayList<>(items);
-
         this.status = "RECEBIDO";
         this.total = items.stream()
                 .map(OrderItem::total)
