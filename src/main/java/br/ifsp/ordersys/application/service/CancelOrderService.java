@@ -19,6 +19,8 @@ public class CancelOrderService {
 
         if (!order.getStatus().equals("ENTREGUE")) {
             order.setStatus("CANCELED");
+        } else {
+            throw new IllegalStateException("CANNOT_CANCEL_DELIVERED_ORDER");
         }
     }
 
