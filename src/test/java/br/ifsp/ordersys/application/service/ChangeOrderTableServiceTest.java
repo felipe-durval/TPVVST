@@ -36,4 +36,29 @@ class ChangeOrderTableServiceTest {
 
         assertEquals("mesa-08", updated.getTable().getId());
     }
+
+    @Test
+    void shouldRejectChangeToInvalidTable() {
+        Table oldTable = new Table("mesa-05");
+        CustomerId customerId = new CustomerId(oldTable.getId());
+
+        List<OrderItem> items = List.of(
+                new OrderItem("Pizza", 30, 1, true)
+        );
+
+        PlaceOrderService placeService = new PlaceOrderService();
+        Order order = placeService.createOrder(customerId, oldTable, items);
+
+        ChangeOrderTableService changeService = new ChangeOrderTableService(placeService);
+
+        // mesa inválida (não cadastrada)
+        Table invalidTable = new Table("");
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> changeService.changeTable(order.getId(), invalidTable)
+        );
+
+        assertEquals("INVALID_TABLE", exception.getMessage());
+    }
 }
