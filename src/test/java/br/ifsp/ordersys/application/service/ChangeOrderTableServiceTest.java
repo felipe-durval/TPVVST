@@ -51,7 +51,7 @@ class ChangeOrderTableServiceTest {
 
         ChangeOrderTableService changeService = new ChangeOrderTableService(placeService);
 
-        // mesa inválida (não cadastrada)
+
         Table invalidTable = new Table("");
 
         IllegalArgumentException exception = assertThrows(
@@ -61,4 +61,30 @@ class ChangeOrderTableServiceTest {
 
         assertEquals("INVALID_TABLE", exception.getMessage());
     }
+    @Test
+    void shouldRejectChangeToOccupiedTable() {
+        // mesa original
+        Table table04 = new Table("mesa-04");
+        CustomerId customer1 = new CustomerId(table04.getId());
+        List<OrderItem> items1 = List.of(new OrderItem("Pizza", 30, 1, true));
+
+        // mesa já ocupada
+        Table table02 = new Table("mesa-02");
+        CustomerId customer2 = new CustomerId(table02.getId());
+        List<OrderItem> items2 = List.of(new OrderItem("Lasanha", 35, 1, true));
+
+        PlaceOrderService placeService = new PlaceOrderService();
+        Order pedido103 = placeService.createOrder(customer1, table04, items1);
+        placeService.createOrder(customer2, table02, items2); // mesa ocupada
+
+        ChangeOrderTableService changeService = new ChangeOrderTableService(placeService);
+
+        IllegalStateException exception = assertThrows(
+                IllegalStateException.class,
+                () -> changeService.changeTable(pedido103.getId(), table02)
+        );
+
+        assertEquals("TABLE_ALREADY_OCCUPIED", exception.getMessage());
+    }
+
 }
