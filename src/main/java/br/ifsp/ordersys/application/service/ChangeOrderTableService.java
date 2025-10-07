@@ -18,6 +18,16 @@ public class ChangeOrderTableService {
             throw new IllegalArgumentException("INVALID_TABLE");
         }
 
+
+        boolean tableOccupied = placeOrderService.getAllOrders().stream()
+                .anyMatch(o -> o.getTable().getId().equals(newTable.getId())
+                        && !o.getId().equals(orderId)
+                        && !o.getStatus().equals("CANCELED"));
+
+        if (tableOccupied) {
+            throw new IllegalStateException("TABLE_ALREADY_OCCUPIED");
+        }
+
         Order order = placeOrderService.getAllOrders().stream()
                 .filter(o -> o.getId().equals(orderId))
                 .findFirst()
