@@ -12,27 +12,28 @@ public class CancelOrderService {
     }
 
     public void cancelOrder(UUID orderId) {
-        Order order = placeOrderService.getAllOrders().stream()
-                .filter(o -> o.getId().equals(orderId))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("ORDER_NOT_FOUND"));
+        Order order = placeOrderService.getOrderById(orderId); // evita varrer lista
+        if (order == null) {
+            throw new IllegalArgumentException("ORDER_NOT_FOUND");
+        }
 
-        if (order.getStatus().equals("ENTREGUE")) {
+        String status = order.getStatus();
+        if ("ENTREGUE".equalsIgnoreCase(status)) {
             throw new IllegalStateException("CANNOT_CANCEL_DELIVERED_ORDER");
         }
-
-        if (order.getStatus().equals("CANCELED")) {
+        if ("CANCELADO".equalsIgnoreCase(status) || "CANCELED".equalsIgnoreCase(status)) {
             throw new IllegalStateException("ORDER_ALREADY_CANCELLED");
         }
-
-        order.setStatus("CANCELED");
+        order.setStatus("CANCELADO");
     }
 
 
+
     public Order getOrder(UUID orderId) {
-        return placeOrderService.getAllOrders().stream()
-                .filter(o -> o.getId().equals(orderId))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("ORDER_NOT_FOUND"));
+        Order order = placeOrderService.getOrderById(orderId);
+        if (order == null) {
+            throw new IllegalArgumentException("ORDER_NOT_FOUND");
+        }
+        return order;
     }
 }

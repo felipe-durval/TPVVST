@@ -97,7 +97,7 @@ public class AddItemToOrderServiceTest {
 
     @Test
     void shouldRejectAddingItemToDeliveredOrder() {
-        // Dado que existe um pedido no status ENTREGUE
+
         Table table = new Table("mesa-25");
         CustomerId customerId = new CustomerId(table.getId());
 
@@ -108,14 +108,14 @@ public class AddItemToOrderServiceTest {
         PlaceOrderService placeService = new PlaceOrderService();
         Order existingOrder = placeService.createOrder(customerId, table, initialItems);
 
-        // Simula mudança de status do pedido para ENTREGUE
+
         existingOrder.setStatus("ENTREGUE");
 
         AddItemToOrderService addService = new AddItemToOrderService(placeService);
 
         OrderItem lasanha = new OrderItem("Lasanha", 35, 1, true);
 
-        // Quando tenta adicionar novo item
+
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
                 () -> addService.addItem(existingOrder.getId(), lasanha)

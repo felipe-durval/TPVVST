@@ -33,7 +33,7 @@ class CancelOrderServiceTest {
         cancelService.cancelOrder(order.getId());
 
         Order canceled = cancelService.getOrder(order.getId());
-        assertEquals("CANCELED", canceled.getStatus());
+        assertEquals("CANCELADO", canceled.getStatus());
     }
 
     //US 05 - SCENARIO 2
@@ -76,7 +76,7 @@ class CancelOrderServiceTest {
         Order order = placeService.createOrder(customerId, table, items);
 
         // simula pedido cancelado anteriormente
-        order.setStatus("CANCELED");
+        order.setStatus("CANCELADO");
 
         CancelOrderService cancelService = new CancelOrderService(placeService);
 

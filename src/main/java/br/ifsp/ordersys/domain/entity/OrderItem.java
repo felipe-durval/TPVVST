@@ -6,7 +6,7 @@ public class OrderItem {
     private final String name;
     private final int unitPrice;
     private final int quantity;
-    private boolean available = false;
+    private final boolean available;
 
     public OrderItem(String name, int unitPrice, int quantity, boolean available) {
         this.name = name;
@@ -15,15 +15,8 @@ public class OrderItem {
         this.available = available;
     }
 
-
-    public Money total() {
-        return Money.of(unitPrice * quantity);
-    }
-
-    public boolean isAvailable() {
-        return available;
-    }
-
+    public Money total() { return Money.of(unitPrice * quantity); }
+    public boolean isAvailable() { return available; }
     public String getName() { return name; }
     public int getUnitPrice() { return unitPrice; }
     public int getQuantity() { return quantity; }
