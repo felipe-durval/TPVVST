@@ -5,39 +5,34 @@ import br.ifsp.ordersys.domain.entity.OrderItem;
 import br.ifsp.ordersys.domain.valueobject.CustomerId;
 import br.ifsp.ordersys.domain.valueobject.Table;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PlaceOrderService {
-    // armazenamento em memória (histórico)
-    private final Map<String, List<Order>> ordersByTable = new HashMap<>();
+
+    private final Map<String, List<Order>> ordersByTable = new ConcurrentHashMap<>();
+    private final Map<UUID, Order> indexById = new ConcurrentHashMap<>();
 
     public Order createOrder(CustomerId customerId, Table table, List<OrderItem> items) {
+        Objects.requireNonNull(customerId, "customerId");
+        Objects.requireNonNull(table, "table");
+        Objects.requireNonNull(items, "items");
+
         Order order = new Order(customerId.getValue(), table, items);
         ordersByTable.computeIfAbsent(table.getId(), k -> new ArrayList<>()).add(order);
+        indexById.put(order.getId(), order);
         return order;
     }
+
     public List<Order> getOrdersForTable(String tableId) {
-        return ordersByTable.getOrDefault(tableId, List.of());
+        return Collections.unmodifiableList(ordersByTable.getOrDefault(tableId, List.of()));
     }
 
-
-    public Order getOrderById(java.util.UUID orderId) {
-        return ordersByTable.values().stream()
-                .flatMap(List::stream)
-                .filter(o -> o.getId().equals(orderId))
-                .findFirst()
-                .orElse(null);
+    public Order getOrderById(UUID orderId) {
+        return indexById.get(orderId);
     }
 
     public List<Order> getAllOrders() {
-        return ordersByTable.values().stream()
-                .flatMap(List::stream)
-                .toList();
+        return Collections.unmodifiableList(indexById.values().stream().toList());
     }
-
-
 }
-
