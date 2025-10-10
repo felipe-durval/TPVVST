@@ -87,12 +87,14 @@ public class Order {
 
     private static OrderStatus toInternal(String external) {
         if (external == null) throw new IllegalArgumentException("INVALID_STATUS");
-        return switch (external) {
-            case "RECEBIDO" -> OrderStatus.RECEBIDO;
-            case "EM_PREPARO" -> OrderStatus.PREPARANDO;
-            case "PRONTO" -> OrderStatus.PRONTO;
-            case "ENTREGUE" -> OrderStatus.ENTREGUE;
-            case "CANCELADO" -> OrderStatus.CANCELADO;
+        String norm = external.trim().toUpperCase(Locale.ROOT);
+
+        return switch (norm) {
+            case "RECEBIDO"    -> OrderStatus.RECEBIDO;
+            case "EM_PREPARO"  -> OrderStatus.PREPARANDO;
+            case "PRONTO"      -> OrderStatus.PRONTO;
+            case "ENTREGUE"    -> OrderStatus.ENTREGUE;
+            case "CANCELADO", "CANCELED" -> OrderStatus.CANCELADO;
             default -> throw new IllegalArgumentException("INVALID_STATUS");
         };
     }
