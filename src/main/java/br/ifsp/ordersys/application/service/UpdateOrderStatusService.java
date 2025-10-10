@@ -1,12 +1,13 @@
 package br.ifsp.ordersys.application.service;
 
 import br.ifsp.ordersys.domain.aggregate.Order;
-import org.springframework.stereotype.Service;
+import java.util.Objects;
 
-@Service
 public class UpdateOrderStatusService {
 
     public void updateStatus(Order order, String newStatus) {
+        Objects.requireNonNull(order, "order");
+        Objects.requireNonNull(newStatus, "newStatus");
         order.setStatus(newStatus);
     }
 }
