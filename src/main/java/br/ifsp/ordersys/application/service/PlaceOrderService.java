@@ -32,5 +32,12 @@ public class PlaceOrderService {
                 .orElse(null);
     }
 
+    public List<Order> getAllOrders() {
+        return ordersByTable.values().stream()
+                .flatMap(List::stream)
+                .toList();
+    }
+
+
 }
 

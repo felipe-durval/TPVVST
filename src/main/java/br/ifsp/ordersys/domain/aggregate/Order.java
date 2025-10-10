@@ -13,14 +13,25 @@ public class Order {
 
     private final UUID id;
     private final String customerId;
-    private final Table table;
     private final List<OrderItem> items;
+    private Table table;
     private String status;
     private Money total;
 
     public Order(String customerId, Table table, List<OrderItem> items) {
         if (items == null || items.isEmpty()) {
             throw new IllegalArgumentException("EMPTY_ORDER");
+        }
+
+        boolean hasUnavailable = items.stream().anyMatch(i -> !i.isAvailable());
+        if (hasUnavailable) {
+            throw new IllegalArgumentException("ITEM_UNAVAILABLE");
+        }
+
+        // ⚠️ ESTA É A VALIDAÇÃO QUE ESTÁ FALTANDO
+        boolean hasInvalidQuantity = items.stream().anyMatch(i -> i.getQuantity() <= 0);
+        if (hasInvalidQuantity) {
+            throw new IllegalArgumentException("INVALID_QUANTITY");
         }
 
         this.id = UUID.randomUUID();
@@ -42,17 +53,21 @@ public class Order {
         this.total = this.total.add(item.total());
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+
 
     public UUID getId() { return id; }
     public String getCustomerId() { return customerId; }
     public Table getTable() { return table; }
     public String getStatus() { return status; }
     public Money getTotal() { return total; }
-
     public List<OrderItem> getItems() {
         return Collections.unmodifiableList(items);
     }
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    public void setTable(Table newTable) {
+        this.table = newTable;
+    }
+
 }
